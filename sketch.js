@@ -1,3 +1,4 @@
+
 var x1, y1;
 var x2, y2;
 var l1, l2;
@@ -7,11 +8,13 @@ var v_l1, v_l2;
 var a_l1, a_l2;
 var g = 1;
 var pg;
+var dessinx = [];
+var dessiny = [];
 
 l1 = 200.0;
-l2 = 200.0;
-m1 = 20;
-m2 = 20;
+l2 = 100.0;
+m1 = 32;
+m2 = 30;
 
 v_l1 = 0.0;
 v_l2 = 0.0;
@@ -22,11 +25,15 @@ a_l2 = 0.0;
 function setup() {
   createCanvas(1000, 1000);
   pg = createGraphics(1000,1000);
-  teta1 = PI+0.001;
-  teta2 = PI;
+  teta1 = PI/2;
+  teta2 = PI/2;
+	dessinx = [l1 * sin(teta1),l1 * cos(teta1)];
+	dessiny =  [x1 + l2 * sin(teta2),x1 + l2 * cos(teta2)];
 }
 
 function draw() {
+	dessinx[0] = dessinx[1];
+	dessiny[0] = dessiny[1];
   background(255);
 
   translate(500,500);
@@ -54,8 +61,11 @@ function draw() {
   v_l2 = v_l2 + a_l2;
   teta1 = teta1 + v_l1;
   teta2 = teta2 + v_l2;
+	dessinx[1] = x2;
+	dessiny[1] = y2;
 
-  pg.ellipse(x2+500,y2+500,5,5);
+	pg.stroke('red');
+	pg.line(dessinx[0]+500,dessiny[0]+500,dessinx[1]+500,dessiny[1]+500);
 
   image(pg,-500,-500);
 
