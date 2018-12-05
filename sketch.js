@@ -6,6 +6,7 @@ var teta1, teta2;
 var v_l1, v_l2;
 var a_l1, a_l2;
 var g = 1;
+var pg;
 
 l1 = 200.0;
 l2 = 200.0;
@@ -20,12 +21,14 @@ a_l2 = 0.0;
 
 function setup() {
   createCanvas(1000, 1000);
-  teta1 = PI/2;
-  teta2 = PI/2;
+  pg = createGraphics(1000,1000);
+  teta1 = PI+0.001;
+  teta2 = PI;
 }
 
 function draw() {
   background(255);
+
   translate(500,500);
 
   var a_l1Num =  -g*(2*m1 + m2)*sin(teta1) - m2*g*sin(teta1-2*teta2) - 2*sin(teta1-teta2)*m2*(pow(v_l2,2)*l2 + pow(v_l1,2)*l1*cos(teta1-teta2));
@@ -51,5 +54,9 @@ function draw() {
   v_l2 = v_l2 + a_l2;
   teta1 = teta1 + v_l1;
   teta2 = teta2 + v_l2;
+
+  pg.ellipse(x2+500,y2+500,5,5);
+
+  image(pg,-500,-500);
 
 }
