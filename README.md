@@ -9,6 +9,8 @@ Pour jouer :
 - entrer le joueur 1 : h pour un humain, I pour une IA
 - pareil pour le joueur 2
 
-- pour une IA le niveau de l'ia n'est pas importante pour le moment
+- pour une IA vous devrez choisir la difficultée : 
+  b = basique, elle choisie une case jouable au hasard
+  a = avancée, elle choisie la case qui lui apporte le plus de point
 
 - une fois en jeu, cliquez sur les cases jaunes pour poser vos pions
