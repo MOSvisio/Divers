@@ -18,6 +18,136 @@ def askplayer(id):
             print('Il faut répondre h ou I, merci.')
     return res
 
+                        
+def compte(nbcols, nbrows, board, gw, joueur):
+    posOptimal = [-1,0,0]
+    posMax = [-1,-1,-1]
+    if joueur == 'blue' :
+        advers = 'red'
+    elif joueur == 'red':
+        advers = 'blue'
+    for i in range(nbcols):
+        for j in range(nbrows):
+            if(board.getvalue(i,j) != 0):
+                if(board.getvalue(i,j) == 'posPo'):
+                    posOptimal[0] = i
+                    posOptimal[1] = j
+                    posOptimal[2] = compteDroite(board, i, j, advers, joueur) + compteGauche(board, i, j, advers, joueur) + compteHaut(board, i, j, advers, joueur) + compteBas(board, i, j, advers, joueur) + compteDiagoDB(board, i, j, advers, joueur) + compteDiagoDH(board, i, j, advers, joueur) + compteDiagoGH(board, i, j, advers, joueur) + compteDiagoGB(board, i, j, advers, joueur)
+                    if(posOptimal[2] > posMax[2]):
+                        posMax[0] = posOptimal[0]
+                        posMax[1] = posOptimal[1]
+                        posMax[2] = posOptimal[2]
+    return posMax
+        
+
+def compteDiagoDB(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(j<=0 or j>=7 or i<=0 or i >=7):
+        return 0
+    if(board.getvalue(i+1,j+1) == valEntre):
+        while(j<7 and i<7):
+            if(board.getvalue(i+1, j+1) == valEntre):
+                count=count+1
+            elif(board.getvalue(i+1,j+1) == valJoueur):
+                return count
+            i=i+1
+            j=j+1
+    return 0
+
+def compteDiagoDH(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(j<=0 or j>=7 or i<=0 or i >=7):
+        return 0
+    if(board.getvalue(i-1,j+1) == valEntre):
+        while(j<7 and i>0):
+            if(board.getvalue(i-1, j+1) == valEntre):
+                count=count+1
+            elif(board.getvalue(i-1,j+1) == valJoueur):
+                return count
+            i=i-1
+            j=j+1
+    return 0
+
+def compteDiagoGH(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(j<=0 or j>=7 or i<=0 or i >=7):
+        return 0
+    if(board.getvalue(i-1,j-1) == valEntre):
+        while(j>0 and i>0):
+            if(board.getvalue(i-1, j-1) == valEntre):
+                count=count+1
+            elif(board.getvalue(i-1,j-1) == valJoueur):
+                return count
+            i=i-1
+            j=j-1
+    return 0
+
+def compteDiagoGB(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(j<=0 or j>=7 or i<=0 or i >=7):
+        return 0
+    if(board.getvalue(i+1,j-1) == valEntre):
+        while(j>0 and i>7):
+            if(board.getvalue(i+1, j-1) == valEntre):
+                count=count+1
+            elif(board.getvalue(i+1,j-1) == valJoueur):
+                return count
+            i=i+1
+            j=j-1
+    return 0
+                
+
+def compteDroite(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(j>=7):
+        return 0
+    if(board.getvalue(i,j+1) == valEntre):
+        while(j<7):
+            j=j+1
+            if(board.getvalue(i,j) == valEntre):
+                count = count + 1
+            elif(board.getvalue(i,j) == valJoueur):
+                return count
+    return 0
+
+def compteGauche(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(j<=0):
+        return 0
+    if(board.getvalue(i,j-1) == valEntre):
+        while(j>0):
+            j=j-1
+            if(board.getvalue(i,j) == valEntre):
+                count = count + 1
+            elif(board.getvalue(i,j) == valJoueur):
+                return count
+    return 0
+
+def compteHaut(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(i<=0):
+        return 0
+    if(board.getvalue(i-1,j) == valEntre):
+        while(i>0):
+            i=i-1
+            if(board.getvalue(i,j) == valEntre):
+                count = count + 1
+            elif(board.getvalue(i,j) == valJoueur):
+                return count
+    return 0
+
+def compteBas(board, i, j, valEntre, valJoueur):
+    count = 0
+    if(i>=7):
+        return 0
+    if(board.getvalue(i+1,j) == valEntre):
+        while(i<7):
+            i=i+1
+            if(board.getvalue(i,j) == valEntre):
+                count = count + 1
+            elif(board.getvalue(i,j) == valJoueur):
+                return count
+    return 0
 
 def cleanTable(nbcols, nbrows, board, gw):
     for i in range(nbcols):
@@ -34,7 +164,7 @@ def chercheZoneJouable(nbcols, nbrows, board,gw,joueur):
         advers = 'red'
     elif joueur == 'red':
         advers = 'blue'
-    
+        
     for i in range(nbcols):
         for j in range(nbrows):
             if(board.getvalue(i,j) != 0):
@@ -47,6 +177,7 @@ def chercheZoneJouable(nbcols, nbrows, board,gw,joueur):
                     posPoDiagoGaucheBas(board, gw, i, j, advers, joueur)
                     posPoDiagoGaucheHaut(board, gw, i, j, advers, joueur)
                     posPoDiagoDroiteHaut(board, gw, i, j, advers, joueur)
+
 
 
                     
@@ -158,9 +289,9 @@ def posPoBas(board, gw, i, j, valEntre, valJoueur):
 
 
 
-
-
-
+"""
+  FONCTION QUI CHANGE LES PIONS GAGNE  
+"""
             
 def changeDroite(board, gw, i, j, valEntre, valJoueur):
     tupGene = []
@@ -348,7 +479,10 @@ def attribut(nbcols, nbrows, board,gw,joueur,i,j):
 def joueur(couleur,nbcols,nbrows,board,gw,queue):
     cleanTable(nbcols,nbrows,board,gw)
     chercheZoneJouable(nbcols, nbrows, board,gw, couleur)
+    compte(nbcols, nbrows, board, gw, couleur)
     coord = waitformouseclick(queue)
+    while(board.getvalue(coord[0],coord[1]) != 'posPo'):
+        coord = waitformouseclick(queue)
     print("Click coordinate are : ", coord[0], coord[1])
     if(board.getvalue(coord[0],coord[1]) == 'posPo'):
         gw.drawwhitesquare(coord[0],coord[1])
@@ -364,34 +498,102 @@ def joueur(couleur,nbcols,nbrows,board,gw,queue):
 def choixCoordJouable(nbcols, nbrows, board):
     coordI = []
     coordJ = []
+    count = 0
     choix = []
     for i in range(nbcols):
         for j in range(nbrows):
             if board.getvalue(i,j) == 'posPo' :
                 coordI.append(i)
                 coordJ.append(j)
-    taille = len(coordI) 
-    x = randint(0,taille-1)
-    choix.append(coordI[x])
-    choix.append(coordJ[x])
-    return choix
+                count = count + 1
+    if count != 0 :
+        taille = len(coordI) 
+        x = randint(0,taille-1)
+        choix.append(coordI[x])
+        choix.append(coordJ[x])
+        return choix
+    else :
+        return ['null']
 
 def iaSimple(couleur,nbcols,nbrows,board,gw,queue):
     cleanTable(nbcols,nbrows,board,gw)
     chercheZoneJouable(nbcols, nbrows, board,gw, couleur)
     coord = choixCoordJouable(nbcols,nbrows,board)
-    gw.drawwhitesquare(coord[0],coord[1])
-    if couleur == "red" :
-        gw.drawreddisk(coord[0], coord[1])
-        board.setvalue(coord[0], coord[1], "red")
-        attribut(nbcols, nbrows, board,gw, "red",coord[0], coord[1])
-        cleanTable(nbcols,nbrows,board,gw)
-    if couleur == "blue":
-        gw.drawbluedisk(coord[0], coord[1])
-        board.setvalue(coord[0], coord[1], "blue")
-        attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
-        cleanTable(nbcols,nbrows,board,gw)
+    if coord[0] != 'null' :
+        gw.drawwhitesquare(coord[0],coord[1])
+        if couleur == "red" and len(coord) != 0:
+            gw.drawwhitesquare(coord[0],coord[1])
+            gw.drawreddisk(coord[0], coord[1])
+            board.setvalue(coord[0], coord[1], "red")
+            attribut(nbcols, nbrows, board,gw, "red",coord[0], coord[1])
+            cleanTable(nbcols,nbrows,board,gw)
+        if couleur == "blue" and len(coord) != 0:
+            gw.drawwhitesquare(coord[0],coord[1])
+            gw.drawbluedisk(coord[0], coord[1])
+            board.setvalue(coord[0], coord[1], "blue")
+            attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
+            cleanTable(nbcols,nbrows,board,gw)
+            
+def iaComplexe(couleur, nbcols, nbrows, board, gw, queue):
+    cleanTable(nbcols, nbrows, board, gw)
+    chercheZoneJouable(nbcols, nbrows, board,gw, couleur)
+    coord = compte(nbcols, nbrows, board, gw, couleur)
+    if coord[0] != -1 :
+        gw.drawwhitesquare(coord[0],coord[1])
+        if couleur == "red" and len(coord) != 0:
+            gw.drawwhitesquare(coord[0],coord[1])
+            gw.drawreddisk(coord[0], coord[1])
+            board.setvalue(coord[0], coord[1], "red")
+            attribut(nbcols, nbrows, board,gw, "red",coord[0], coord[1])
+            cleanTable(nbcols,nbrows,board,gw)
+        if couleur == "blue" and len(coord) != 0:
+            gw.drawwhitesquare(coord[0],coord[1])
+            gw.drawbluedisk(coord[0], coord[1])
+            board.setvalue(coord[0], coord[1], "blue")
+            attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
+            cleanTable(nbcols,nbrows,board,gw)
     
+    
+
+"""
+    fonction de end game, compte si il y a encore des tours possibles ou non
+"""
+
+def plusDeSolution(nbcols,nbrows,board,gw,queue):
+    chercheZoneJouable(nbcols, nbrows, board,gw,"blue")
+    chercheZoneJouable(nbcols, nbrows, board,gw,"red")
+    count = 0
+    for i in range(nbcols):
+        for j in range(nbrows):
+            if(board.getvalue(i,j) == 'posPo'):
+                count = count + 1
+    cleanTable(nbcols,nbrows,board,gw)
+    if count == 0 :
+        print("plus de solutions")
+        return 1
+    else :
+        return 0
+
+
+def comptePoint(nbcols,nbrows,board, gw ,queue):
+    countB = 0
+    countR = 0
+    for i in range(nbcols):
+       for j in range(nbrows):
+           if(board.getvalue(i,j) == "blue"):
+               countB = countB + 1
+           elif(board.getvalue(i,j) == "red"):
+               countR = countR +1
+    print("joueur bleu : " , countB , " pions")
+    print("joueur rouge : " , countR , " pions")
+    if plusDeSolution(nbcols,nbrows,board,gw,queue) == 1 :
+        if(countB > countR):
+            print("joueur 2 à gagné")
+        elif(countB < countR):
+            print("joueur 1 à gagné")
+        else:
+            print("égalité")
+        
 
 def askstrategy():
     """
@@ -475,7 +677,7 @@ def game(gw, queue, nbrows, nbcols, playerone, playertwo, strategyone, strategyt
     """
     k=0
     fin = 0
-    print(playerone)
+    print()
     
     
     
@@ -500,15 +702,23 @@ def game(gw, queue, nbrows, nbcols, playerone, playertwo, strategyone, strategyt
     
     while(fin != 1) :
         if(playerone == "h"):
+            print("Au tour du joueur rouge")
             joueur("red",nbcols,nbrows,board,gw,queue)
-        elif(playerone == "I"):
+        elif(playerone == "I" and strategyone == 'b'):
             iaSimple("red",nbcols,nbrows,board,gw,queue)
+        elif(playerone =='I' and strategyone == 'a'):
+            iaComplexe("red", nbcols, nbrows, board, gw, queue)
         if(playertwo == "h"):
+            print("Au tour du joueur bleu")
             joueur('blue',nbcols,nbrows,board,gw,queue)
-        elif(playertwo == "I"):
+        elif(playertwo == "I" and strategytwo == 'b'):
             iaSimple('blue',nbcols,nbrows,board,gw,queue)
+        elif(playertwo == 'I' and strategytwo == 'a'):
+            iaComplexe("blue", nbcols, nbrows, board, gw, queue)
         
-
+        comptePoint(nbcols,nbrows,board,gw,queue)
+        fin = plusDeSolution(nbcols,nbrows,board,gw,queue)
+        
 # Start the game
 # DO NOT CHANGE THIS INSTRUCTION
 run()
