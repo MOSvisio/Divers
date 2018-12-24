@@ -14,3 +14,12 @@ Pour jouer :
   a = avancée, elle choisie la case qui lui apporte le plus de point
 
 - une fois en jeu, cliquez sur les cases jaunes pour poser vos pions
+
+for playing : 
+
+- compile and execute reversi.py
+- for playing against a human enter 'h', against an IA enter 'I'
+- you can choose the difficulty of the IA 
+b for basic
+a for advanced 
+
