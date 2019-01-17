@@ -18,7 +18,13 @@ def askplayer(id):
             print('Il faut répondre h ou I, merci.')
     return res
 
-                        
+"""
+
+    La fonction compte va compter le nombre de points que peut lui rapporter la pose d'un pion sur une case jouable
+    elle est utilisée pour l'ia avancée
+    compte va ensuite retourner une liste contenant la position dont le nombre de points est le plus elevé 
+
+"""
 def compte(nbcols, nbrows, board, gw, joueur):
     posOptimal = [-1,0,0]
     posMax = [-1,-1,-1]
@@ -39,7 +45,6 @@ def compte(nbcols, nbrows, board, gw, joueur):
                         posMax[2] = posOptimal[2]
     return posMax
         
-
 def compteDiagoDB(board, i, j, valEntre, valJoueur):
     count = 0
     if(j<=0 or j>=7 or i<=0 or i >=7):
@@ -96,7 +101,6 @@ def compteDiagoGB(board, i, j, valEntre, valJoueur):
             j=j-1
     return 0
                 
-
 def compteDroite(board, i, j, valEntre, valJoueur):
     count = 0
     if(j>=7):
@@ -149,6 +153,12 @@ def compteBas(board, i, j, valEntre, valJoueur):
                 return count
     return 0
 
+"""
+
+    cleanTable enlève chaque carré jaune dessiné sur le board
+
+"""
+
 def cleanTable(nbcols, nbrows, board, gw):
     for i in range(nbcols):
         for j in range(nbrows):
@@ -157,7 +167,11 @@ def cleanTable(nbcols, nbrows, board, gw):
                 gw.drawwhitesquare(i,j)
 
 
-#cette fonction va verifier les zones ou le joueur pourra poser un pion
+"""
+
+cette fonction va verifier les zones ou le joueur pourra poser un pion
+
+"""
 def chercheZoneJouable(nbcols, nbrows, board,gw,joueur):
     advers = ''
     if joueur == 'blue' :
@@ -177,11 +191,7 @@ def chercheZoneJouable(nbcols, nbrows, board,gw,joueur):
                     posPoDiagoGaucheBas(board, gw, i, j, advers, joueur)
                     posPoDiagoGaucheHaut(board, gw, i, j, advers, joueur)
                     posPoDiagoDroiteHaut(board, gw, i, j, advers, joueur)
-
-
-
                     
-
 def posPoDiagoDroiteBas(board, gw, i, j, valEntre, valJoueur):
     if(j<=0 or j>=7 or i<=0 or i >=7):
         return 0
@@ -287,10 +297,10 @@ def posPoBas(board, gw, i, j, valEntre, valJoueur):
                 break
 
 
-
-
 """
-  FONCTION QUI CHANGE LES PIONS GAGNE  
+
+    changeDroite va changer tout les pions après la pose d'un nouveau pion
+  
 """
             
 def changeDroite(board, gw, i, j, valEntre, valJoueur):
@@ -310,9 +320,7 @@ def changeDroite(board, gw, i, j, valEntre, valJoueur):
                     elif(valJoueur == 'red'):
                         gw.drawreddisk(i,tupGene[k])
                         board.setvalue(i,tupGene[k], 'red')
-            
-
-                
+                            
 def changeGauche(board, gw, i, j, valEntre, valJoueur):
     tupGene = []
     if(j<=0):
@@ -330,8 +338,7 @@ def changeGauche(board, gw, i, j, valEntre, valJoueur):
                     elif(valJoueur == 'red'):
                         gw.drawreddisk(i,tupGene[k])
                         board.setvalue(i,tupGene[k], 'red')
-                    
-                    
+                                       
 def changeHaut(board, gw, i, j, valEntre, valJoueur):
     tupGene = []
     if(i<=0):
@@ -453,7 +460,6 @@ def changeDiagoHautD(board, gw, i, j, valEntre, valJoueur):
                         gw.drawreddisk(tupI[k],tupJ[k])
                         board.setvalue(tupI[k],tupJ[k], 'red')
 
-            
 def attribut(nbcols, nbrows, board,gw,joueur,i,j):
     advers = ''
     if joueur == 'blue' :
@@ -470,30 +476,32 @@ def attribut(nbcols, nbrows, board,gw,joueur,i,j):
     changeDiagoBasD(board, gw, i, j, advers, joueur)
     changeDiagoBasG(board, gw, i, j, advers, joueur)
     
-    
-
 """
-    LES FONCTIONS DE JEU, JOUEURN IASIMPLE, IACOMPLEXE
+    les fonctions de joueur, iaSimple, iaComplexe
 """
 
 def joueur(couleur,nbcols,nbrows,board,gw,queue):
     cleanTable(nbcols,nbrows,board,gw)
     chercheZoneJouable(nbcols, nbrows, board,gw, couleur)
-    compte(nbcols, nbrows, board, gw, couleur)
-    coord = waitformouseclick(queue)
-    while(board.getvalue(coord[0],coord[1]) != 'posPo'):
+    count = 0
+    for i in range(nbcols):
+        for j in range(nbrows):
+            if board.getvalue(i,j) == 'posPo' :
+                count = count + 1
+    if count != 0 :
         coord = waitformouseclick(queue)
-    print("Click coordinate are : ", coord[0], coord[1])
-    if(board.getvalue(coord[0],coord[1]) == 'posPo'):
-        gw.drawwhitesquare(coord[0],coord[1])
-        if(couleur == 'red'):
-            gw.drawreddisk(coord[0], coord[1])
-            board.setvalue(coord[0], coord[1], "red")
-            attribut(nbcols, nbrows, board,gw, "red",coord[0], coord[1])
-        if(couleur == 'blue'):
-            gw.drawbluedisk(coord[0], coord[1])
-            board.setvalue(coord[0], coord[1], "blue")
-            attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
+        while(board.getvalue(coord[0],coord[1]) != 'posPo'):
+            coord = waitformouseclick(queue)
+        if(board.getvalue(coord[0],coord[1]) == 'posPo'):
+            gw.drawwhitesquare(coord[0],coord[1])
+            if(couleur == 'red'):
+                gw.drawreddisk(coord[0], coord[1])
+                board.setvalue(coord[0], coord[1], "red")
+                attribut(nbcols, nbrows, board,gw, "red",coord[0], coord[1])
+            if(couleur == 'blue'):
+                gw.drawbluedisk(coord[0], coord[1])
+                board.setvalue(coord[0], coord[1], "blue")
+                attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
             
 def choixCoordJouable(nbcols, nbrows, board):
     coordI = []
@@ -552,8 +560,6 @@ def iaComplexe(couleur, nbcols, nbrows, board, gw, queue):
             board.setvalue(coord[0], coord[1], "blue")
             attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
             cleanTable(nbcols,nbrows,board,gw)
-    
-    
 
 """
     fonction de end game, compte si il y a encore des tours possibles ou non
@@ -679,27 +685,24 @@ def game(gw, queue, nbrows, nbcols, playerone, playertwo, strategyone, strategyt
     fin = 0
     print()
     
-    
-    
-    #Drawing basic disk
     board = Array2D(8,8)
     for i in range(nbcols):
         for j in range(nbrows):
             board.setvalue(i,j,0)
 
     
-    # Drawing a blue disk
+    # Drawing the blue disks
     gw.drawbluedisk(3, 3)
     board.setvalue(3,3,'blue')
     gw.drawbluedisk(4, 4)
     board.setvalue(4,4,'blue')
-    # Drawing a red disk
+    # Drawing the red disks
     gw.drawreddisk(4,3)
     board.setvalue(4,3,'red')
     gw.drawreddisk(3, 4)
     board.setvalue(3,4,'red')
     
-    
+    # boucle de jeu, tout se déroule dans cette boucle 
     while(fin != 1) :
         if(playerone == "h"):
             print("Au tour du joueur rouge")
