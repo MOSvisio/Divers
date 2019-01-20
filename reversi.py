@@ -4,6 +4,35 @@ from queue import Queue
 from array2d import Array2D
 from random import randint
 
+
+"""
+
+    Bienvenue sur le code du jeu Othello
+    
+    Vous pourrez, en executant ce programme, jouer au jeu Othello en mode :
+    - joueur contre joueur
+    - joueur contre IA basique
+    - joueur contre IA avancée
+    - IA (avancée ou basique) contre IA (avancée ou basique)
+    
+    Ce code est fonctionnel et permet d'effectuer une partie dans son intégralité.
+    
+    Fonctionnalités implémentées :
+    - IA simple
+    - IA complexe
+    - joueur
+    - afficher les coups valides
+    - attribution des pions
+    - affichage des tours et du score sur la sortie standard
+    - arrêt automatique des tours de jeu en cas de fin de partie
+    
+    Vous trouverez également le programme sur Github à l'adresse : https://github.com/MOSvisio/Divers/tree/othello
+    
+
+"""
+
+
+
 def askplayer(id):
     """
     DO NOT CHANGE THIS FUNCTION
@@ -20,9 +49,9 @@ def askplayer(id):
 
 """
 
-    La fonction compte va compter le nombre de points que peut lui rapporter la pose d'un pion sur une case jouable
-    elle est utilisée pour l'ia avancée
-    compte va ensuite retourner une liste contenant la position dont le nombre de points est le plus elevé 
+    La fonction "compte" va compter le nombre de points que peut lui rapporter la pose d'un pion sur une case jouable.
+    elle est utilisée pour l'IA avancée.
+    "compte" va ensuite retourner une liste contenant la position dont le nombre de points est le plus elevé.
 
 """
 def compte(nbcols, nbrows, board, gw, joueur):
@@ -155,7 +184,7 @@ def compteBas(board, i, j, valEntre, valJoueur):
 
 """
 
-    cleanTable enlève chaque carré jaune dessiné sur le board
+    "cleanTable" enlève chaque carré jaune dessiné sur le board.
 
 """
 
@@ -169,7 +198,8 @@ def cleanTable(nbcols, nbrows, board, gw):
 
 """
 
-cette fonction va verifier les zones ou le joueur pourra poser un pion
+    La fonction "chercheZoneJouable" va analyser le jeu pour trouver toutes les cases ou le joueur pourra poser un pion.
+    La fonction utilise les sous-fonction "PosPo..." (position possible) qui va analyser chaque point cardinal d'un pion. 
 
 """
 def chercheZoneJouable(nbcols, nbrows, board,gw,joueur):
@@ -299,10 +329,27 @@ def posPoBas(board, gw, i, j, valEntre, valJoueur):
 
 """
 
-    changeDroite va changer tout les pions après la pose d'un nouveau pion
+    La fonction "attribut" va attribuer au joueur, après la pose de son pion, les pions qu'il aura gagnés.
+    La fonction utilise les sous-fonctions "change..." qui vont changer les pions en allant vers les points cardinaux depuis le pion posé.
   
 """
-            
+
+def attribut(nbcols, nbrows, board,gw,joueur,i,j):
+    advers = ''
+    if joueur == 'blue' :
+        advers = 'red'
+    elif joueur == 'red':
+        advers = 'blue'
+    
+    changeBas(board, gw, i, j, advers, joueur)
+    changeHaut(board, gw, i, j, advers, joueur)
+    changeDroite(board, gw, i, j, advers, joueur)
+    changeGauche(board, gw, i, j, advers, joueur)
+    changeDiagoHautD(board, gw, i, j, advers, joueur)
+    changeDiagoHautG(board, gw, i, j, advers, joueur)
+    changeDiagoBasD(board, gw, i, j, advers, joueur)
+    changeDiagoBasG(board, gw, i, j, advers, joueur)
+
 def changeDroite(board, gw, i, j, valEntre, valJoueur):
     tupGene = []
     if(j>=7):
@@ -460,24 +507,9 @@ def changeDiagoHautD(board, gw, i, j, valEntre, valJoueur):
                         gw.drawreddisk(tupI[k],tupJ[k])
                         board.setvalue(tupI[k],tupJ[k], 'red')
 
-def attribut(nbcols, nbrows, board,gw,joueur,i,j):
-    advers = ''
-    if joueur == 'blue' :
-        advers = 'red'
-    elif joueur == 'red':
-        advers = 'blue'
-    
-    changeBas(board, gw, i, j, advers, joueur)
-    changeHaut(board, gw, i, j, advers, joueur)
-    changeDroite(board, gw, i, j, advers, joueur)
-    changeGauche(board, gw, i, j, advers, joueur)
-    changeDiagoHautD(board, gw, i, j, advers, joueur)
-    changeDiagoHautG(board, gw, i, j, advers, joueur)
-    changeDiagoBasD(board, gw, i, j, advers, joueur)
-    changeDiagoBasG(board, gw, i, j, advers, joueur)
     
 """
-    les fonctions de joueur, iaSimple, iaComplexe
+    La fonction "joueur" va gérer les tours de chaque joueur.
 """
 
 def joueur(couleur,nbcols,nbrows,board,gw,queue):
@@ -502,7 +534,13 @@ def joueur(couleur,nbcols,nbrows,board,gw,queue):
                 gw.drawbluedisk(coord[0], coord[1])
                 board.setvalue(coord[0], coord[1], "blue")
                 attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
-            
+
+"""
+
+    "choixCoordJouable" va être utilisée pour l'IA basique, elle va choisir une coordonnée au hasard parmi les positions possibles.
+
+"""
+
 def choixCoordJouable(nbcols, nbrows, board):
     coordI = []
     coordJ = []
@@ -542,6 +580,11 @@ def iaSimple(couleur,nbcols,nbrows,board,gw,queue):
             attribut(nbcols, nbrows, board,gw, "blue",coord[0], coord[1])
             cleanTable(nbcols,nbrows,board,gw)
             
+"""
+
+    "iaComplexe" utilise la fonction "compte" et va choisir parmi les positions possibles la case qui lui rapportera le plus de pions.
+
+"""
 def iaComplexe(couleur, nbcols, nbrows, board, gw, queue):
     cleanTable(nbcols, nbrows, board, gw)
     chercheZoneJouable(nbcols, nbrows, board,gw, couleur)
@@ -562,7 +605,7 @@ def iaComplexe(couleur, nbcols, nbrows, board, gw, queue):
             cleanTable(nbcols,nbrows,board,gw)
 
 """
-    fonction de end game, compte si il y a encore des tours possibles ou non
+    fonction utilisée par la fin de partie, elle compte si il y a encore des tours possibles ou non.
 """
 
 def plusDeSolution(nbcols,nbrows,board,gw,queue):
@@ -580,6 +623,11 @@ def plusDeSolution(nbcols,nbrows,board,gw,queue):
     else :
         return 0
 
+"""
+
+    La fonction "comptePoint" compte le nombre de pions de chaque joueur.
+
+"""
 
 def comptePoint(nbcols,nbrows,board, gw ,queue):
     countB = 0
@@ -594,9 +642,9 @@ def comptePoint(nbcols,nbrows,board, gw ,queue):
     print("joueur rouge : " , countR , " pions")
     if plusDeSolution(nbcols,nbrows,board,gw,queue) == 1 :
         if(countB > countR):
-            print("joueur 2 à gagné")
+            print("joueur 2 à gagné (bleu)")
         elif(countB < countR):
-            print("joueur 1 à gagné")
+            print("joueur 1 à gagné (rouge)")
         else:
             print("égalité")
         
