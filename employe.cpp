@@ -21,8 +21,8 @@ void employe::setAge(int i){
     this->age = i;
 }
 
-float employe::Salaire(int nb, float multi){
-    return nb*multi;
+float employe::Salaire(){
+    return 0;
 }
 
 void employe::afficher(){

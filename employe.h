@@ -20,8 +20,8 @@ class employe{
         void setPrenom(string);
         void setAge(int);
 
-        virtual float Salaire(int, float);
-        void afficher();
+        virtual float Salaire();
+        virtual void afficher();
 
 };
 

@@ -1,6 +1,7 @@
 #ifndef EMPLOI_H
 #define EMPLOI_H
 #include "employe.h"
+
 using namespace std;
 
 class Manutentionnaire : public employe{

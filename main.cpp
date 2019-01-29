@@ -9,10 +9,18 @@ using namespace std;
 int main(){
 
    employe em("SCHUTZ","Lucas",21);
+   
    Manutentionnaire test(100,"SCHUTZ", "Lucas", 21);
    Vendeur vendu(10,"DAUFFER", "Quentin", 3);
    em = vendu;
    em.afficher();
    test.afficher();
    vendu.afficher();
+   
+   cout < "----------------------------";
+   
+   employe * te[2];
+   te[0] = &vendu;
+   cout << te[0]->Salaire();
+   
 }

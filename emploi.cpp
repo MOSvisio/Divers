@@ -6,8 +6,7 @@ Manutentionnaire::Manutentionnaire(int i,string n, string p, int a) : employe(n,
 }
 
 float Manutentionnaire::Salaire(){
-    return employe::Salaire(this->nombreHeure,10);
-}
+    return this->nombreHeure*10;}
 
 void Manutentionnaire::afficher(){
     employe::afficher();
@@ -21,7 +20,7 @@ Technicien::Technicien(int i, string n, string p, int a) : employe(n,p,a) {
 }
 
 float Technicien::Salaire(){
-    return employe::Salaire(this->nombreUnite,2);
+    return this->nombreUnite * 2;
 }
 
 void Technicien::afficher(){
@@ -35,7 +34,7 @@ Representant::Representant(int i, string n, string p, int a) : employe(n,p,a){
 }
 
 float Representant::Salaire(){
-    return employe::Salaire(this->chiffreAffaire,0.2) + 120;
+    return this->chiffreAffaire * 0.2 + 120;
 }
 
 void Representant::afficher(){   
@@ -49,7 +48,7 @@ Vendeur::Vendeur(int i, string n, string p, int a) : employe(n,p,a) {
 }
 
 float Vendeur::Salaire(){
-    return employe::Salaire(this->chiffreAffaire,0.2) + 60;
+    return this->chiffreAffaire * 0.2 + 60;
 }
 
 void Vendeur::afficher(){

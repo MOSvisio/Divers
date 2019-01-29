@@ -3,16 +3,16 @@
 #include"employe.h"
 
 class CollectionEmploye{
-    
-    /*private:
-        employe tab[];
+
+    private:
+        employe * tab;
+        int nb_employe;
 
     public:
         CollectionEmploye();
         void afficher();
         void ajouterEmploye();
-        float salaireMoyen();*/
-
+        float salaireMoyen();
 };
 
 
