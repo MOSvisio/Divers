@@ -1,4 +1,4 @@
 # Divers
 Divers projet, cours, perso
 
-Ce repositorie contient une partie des exercices de programmation réalisé en cours, ainsi que des programmes perso et des tests
+Cette branche contient le projet Employé du cours C++, le but de ce projet était de gérer les employés d'une entreprise. Il s'agissait d'un cours d'introduction aux classes en C++
