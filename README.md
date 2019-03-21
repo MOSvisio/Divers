@@ -1,4 +1,4 @@
 # Divers
 Divers projet, cours, perso
 
-Ce repositorie contient une partie des exercices de programmation réalisé en cours, ainsi que des programmes perso et des tests
+Cette branche contient un projet personnel, je souhaitais réaliser une double pendule en P5.JS. 
