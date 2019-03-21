@@ -1,4 +1,4 @@
 # Divers
 Divers projet, cours, perso
 
-BONSOIR
+Ce projet gère le tri de tableau utilisant les pointeurs 
