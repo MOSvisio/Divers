@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key ="bdd">schutz27u_magasin</entry>
+<entry key ="login">schutz27u_appli</entry>
+<entry key ="pass">31807585</entry>
+<entry key ="port">3306</entry>
+<entry key ="adresse_ip">jdbc:mysql://devbdd.iutmetz.univ-lorraine.fr:3306/schutz27u_magasin</entry>
+</properties>
