@@ -29,17 +29,17 @@ public class ctrProduit {
 		double tarif =Double.parseDouble(this.txtTarif.getText());
 		int stock = Integer.parseInt(this.txtQuantite.getText());
 		Tva recup = this.listTva.getSelectionModel().getSelectedItem();
+		System.out.println(recup.getLibelle());
 		
 		int n = JOptionPane.showConfirmDialog(null, "Voulez-vous créer : " + nom + ' ' + tarif + "€, stock : " + stock + " tva : " + recup.getId() + "?", "confirmation", JOptionPane.YES_NO_OPTION);
 		if (n == 0) {	
 			new Produit(nom, tarif, stock, recup.getId());
-			labelModele.setText(nom + ' ' + tarif + "€, stock : " + stock + " tva : " + recup.getId());
 		}
 	}
 	
 	public void genereList() {
 		this.listTva.setItems(Tva.getList());
-		this.listTva.getSelectionModel().select(1);
+		this.listTva.getSelectionModel().select(0);
 	}
 	
 	

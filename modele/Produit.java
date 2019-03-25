@@ -19,7 +19,7 @@ public class Produit implements Comparable<Produit>{
 		this.tarif = tarif;
 		this.stock = stock;
 		this.tva = tva;
-		dao.create(this);
+		/*dao.create(this);*/
 	}
 
 	public int getId() {return id;}
@@ -39,7 +39,8 @@ public class Produit implements Comparable<Produit>{
 	public void setTva(int tva) {this.tva = tva;}
 
 	public String toString(){
-		return "id : " + this.id + " nom : " + this.nom + " stock disponible : " + this.stock + " prix : " + this.tarif + " taux de TVA : " + daotva.getById(id).getTaux(); 
+		daotva = TvaDAO.getInstance();
+		return "id : "  + this.id + " nom : " + this.nom + " stock disponible : " + this.stock + " prix : " + this.tarif + " taux de TVA : "; 
 	}
 	
 	public void reapprovisionner(int rea){

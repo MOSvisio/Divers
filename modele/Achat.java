@@ -14,7 +14,7 @@ public class Achat {
 	private float traceTarif;
 	
 	
-	Achat(){
+	public Achat(){
 		this.ProduiQuant = new HashMap<>();
 	}
 	
@@ -30,10 +30,7 @@ public class Achat {
 		}
 	}
 	
-	
-	
-	
 	public void Afficher(){
-
+		System.out.println(this.ProduiQuant.toString());
 	}
 }

@@ -5,6 +5,7 @@ import java.util.*;
 import java.io.*;
 
 import modele.Connexion;
+import modele.Produit;
 import modele.Tva;
 
 
@@ -23,27 +24,19 @@ public class TvaDAO implements DAO<Tva>{
 
 	@Override
 	public Tva getById(int id) {
+		Tva tv = null;
 		try {
 			Connection laConnexion = Connexion.getInstance().creeConnexion();
-			Statement requete;
-			requete = laConnexion.createStatement();
-			ResultSet res = requete.executeQuery("SELECT * FROM Tva WHERE id = " + id);
-			while(res.next()){
-				System.out.println("id : " + res.getInt("id") + " libelle : " + res.getString("libelle") + " taux : " + res.getDouble("taux"));
-				System.out.println("test");
-				return new Tva(res.getDouble("taux"), res.getString("libelle"));
-			}	
-			if(res != null)
-				res.close();
-			if(requete != null)
-				requete.close();
-			if(laConnexion != null)
-				laConnexion.close();
-		} catch (SQLException sqle) {
-			// TODO Auto-generated catch block
-			System.out.println("Pb lecture Tva " + sqle.getMessage());
+			PreparedStatement requete = laConnexion.prepareStatement("SELECT * FROM Tva WHERE id="+id);
+			ResultSet res = requete.executeQuery();
+			while(res.next()) {
+				tv = new Tva(res.getDouble("taux"), res.getString("libelle"));
+				return tv;
+			}
+		}catch (SQLException sqle){
+			System.out.println("pb recupération du produit par id " + sqle.getMessage());
 		}
-		return null;
+		return tv;
 	}
 
 	@Override
