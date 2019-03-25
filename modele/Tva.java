@@ -40,6 +40,11 @@ public class Tva {
 		return list;
 	}
 	
+	public void creerDansBdd() {
+		dao = TvaDAO.getInstance();
+		dao.create(this);
+	}
+	
 	public static Tva getTvaById(int i) {
 		dao = TvaDAO.getInstance();
 		return dao.getById(i);

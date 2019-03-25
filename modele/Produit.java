@@ -19,7 +19,6 @@ public class Produit implements Comparable<Produit>{
 		this.tarif = tarif;
 		this.stock = stock;
 		this.tva = tva;
-		/*dao.create(this);*/
 	}
 
 	public int getId() {return id;}
@@ -49,7 +48,7 @@ public class Produit implements Comparable<Produit>{
 			dao.update(this);
 	}
 	
-	public void modifierProduit(int id, String nom, double tarif, int stock, int tva){
+	public void modifierProduit(String nom, double tarif, int stock, int tva){
 		setNom(nom);
 		setTarif(tarif);
 		setStock(stock);
@@ -70,6 +69,10 @@ public class Produit implements Comparable<Produit>{
 			System.out.println("Stock indisponible");
 			return 0;
 		}
+	}
+	
+	public void creerDansBdd() {
+		dao.create(this);
 	}
 
 	@Override

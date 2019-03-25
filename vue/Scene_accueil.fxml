@@ -3,9 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,8 +15,72 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ctrAccueil">
   <tabs>
+      <Tab text="Produits">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="344.0" prefWidth="132.0" vgap="50.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="btnAddProd" mnemonicParsing="false" onAction="#showAddProd" prefWidth="100.0" text="Ajouter" />
+                        <Button fx:id="btnDelProd" mnemonicParsing="false" prefWidth="100.0" text="Retirer" />
+                        <Button fx:id="btnModProd" mnemonicParsing="false" onAction="#showModProd" prefWidth="100.0" text="Modifier" />
+                        <Button fx:id="btnReaProd" mnemonicParsing="false" prefWidth="100.0" text="Réapproviser" />
+                     </children>
+                  </FlowPane>
+               </left>
+               <top>
+                  <Label text="Gestion produits" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </top>
+               <center>
+                  <TableView fx:id="produitTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn prefWidth="68.800048828125" text="ID" />
+                      <TableColumn prefWidth="120.7999267578125" text="Libellé" />
+                        <TableColumn prefWidth="102.4000244140625" text="Tarif" />
+                        <TableColumn prefWidth="95.20001220703125" text="Stock" />
+                        <TableColumn minWidth="3.20001220703125" prefWidth="82.39996337890625" text="Tva" />
+                    </columns>
+                  </TableView>
+               </center>
+            </BorderPane>
+         </content>
+      </Tab>
+    <Tab text="Tva">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="344.0" prefWidth="131.0" vgap="50.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="btnAddTva" mnemonicParsing="false" onAction="#showAddTva" prefWidth="100.0" text="Ajouter" />
+                        <Button fx:id="btnDelTva" mnemonicParsing="false" prefWidth="100.0" text="Retirer" />
+                        <Button fx:id="btnModTva" mnemonicParsing="false" onAction="#showModTva" prefWidth="100.0" text="Modifier" />
+                     </children>
+                  </FlowPane>
+               </left>
+               <top>
+                  <Label text="Gestion taux TVA" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </top>
+               <center>
+                  <TableView fx:id="tvaTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn fx:id="tvaIDColumn" prefWidth="107.20001524686813" text="ID" />
+                      <TableColumn fx:id="tvaLibColumn" prefWidth="183.19998168945312" text="Libellé" />
+                        <TableColumn fx:id="tvaTauxColumn" prefWidth="177.6000518798828" text="Taux" />
+                    </columns>
+                  </TableView>
+               </center>
+            </BorderPane>
+         </content></Tab>
     <Tab text="Achat">
          <content>
             <GridPane>
@@ -58,55 +123,5 @@
                </children>
             </GridPane>
          </content></Tab>
-    <Tab text="Tva">
-         <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-               <center>
-                  <ListView editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-               </center>
-               <left>
-                  <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="344.0" prefWidth="131.0" vgap="50.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="btnAddTva" mnemonicParsing="false" prefWidth="100.0" text="Ajouter" />
-                        <Button fx:id="btnDelTva" mnemonicParsing="false" prefWidth="100.0" text="Retirer" />
-                        <Button fx:id="btnModTva" mnemonicParsing="false" prefWidth="100.0" text="Modifier" />
-                     </children>
-                  </FlowPane>
-               </left>
-               <top>
-                  <Label text="Gestion taux TVA" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-               </top>
-            </BorderPane>
-         </content></Tab>
-      <Tab text="Produits">
-         <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-               <center>
-                  <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-               </center>
-               <left>
-                  <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="344.0" prefWidth="132.0" vgap="50.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="btnAddProd" mnemonicParsing="false" prefWidth="100.0" text="Ajouter" />
-                        <Button fx:id="btnDelProd" mnemonicParsing="false" prefWidth="100.0" text="Retirer" />
-                        <Button fx:id="btnModProd" mnemonicParsing="false" prefWidth="100.0" text="Modifier" />
-                        <Button fx:id="btnReaProd" mnemonicParsing="false" prefWidth="100.0" text="Réapproviser" />
-                     </children>
-                  </FlowPane>
-               </left>
-               <top>
-                  <Label text="Gestion produits" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-               </top>
-            </BorderPane>
-         </content>
-      </Tab>
   </tabs>
 </TabPane>

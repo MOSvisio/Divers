@@ -2,8 +2,6 @@ package controller;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,36 +12,21 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import modele.Produit;
 import modele.Tva;
 
-
-
-public class ctrProduit {
+public class ctrModifProduit {
 	
 	@FXML
 	private Label labelModele;
 	@FXML
 	private TextField txtNom;
 	@FXML
-	private TextField txtQuantite;
-	@FXML
 	private TextField txtTarif;
 	@FXML
-	private ComboBox<Tva> listTva; // à changer pour une liste déroulante de choix appel la listTva
+	private ComboBox<Tva> listTva;
 	
-	public void afficherModele() {
-		String nom = this.txtNom.getText();
-		double tarif =Double.parseDouble(this.txtTarif.getText());
-		int stock = Integer.parseInt(this.txtQuantite.getText());
-		Tva recup = this.listTva.getSelectionModel().getSelectedItem();
-		System.out.println(recup.getLibelle());
+	public void modifierProduit() {
 		
-		int n = JOptionPane.showConfirmDialog(null, "Voulez-vous créer : " + nom + ' ' + tarif + "€, stock : " + stock + " tva : " + recup.getId() + "?", "confirmation", JOptionPane.YES_NO_OPTION);
-		if (n == 0) {	
-			Produit ajout = new Produit(nom, tarif, stock, recup.getId());
-			ajout.creerDansBdd();
-		}
 	}
 	
 	public void genereList() {
@@ -60,6 +43,5 @@ public class ctrProduit {
 		window.setScene(tableViewScene);
 		window.show();
 	}
-	
-	
+
 }

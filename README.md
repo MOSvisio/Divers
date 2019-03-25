@@ -1,4 +1,6 @@
 # Divers
 Divers projet, cours, perso
 
-Ce repositorie contient une partie des exercices de programmation réalisé en cours, ainsi que des programmes perso et des tests
+Magasin,
+
+Cette branche contient le projet de gestion de magasin réalisé en cours de Programmation Java le but de ce projet est de réaliser la gestion d'un magasin, avec un interface graphique et la gestion d'une base de données 
