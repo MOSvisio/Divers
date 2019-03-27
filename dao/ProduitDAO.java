@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import modele.Produit;
 import modele.Connexion;
@@ -127,6 +129,42 @@ public class ProduitDAO implements DAO<Produit>{
 			System.out.println("Pb count " + sqle.getMessage());
 		}
 		return 0;
+	}
+	
+	
+
+	public List<Produit> getAll() throws SQLException {
+		
+		List<Produit> list = new ArrayList<>();
+		TvaDAO daotva = null;
+		Connection laConnexion = Connexion.getInstance().creeConnexion(); // la connexion existe dans le singleton et je vais chercher ma Connection avec le getConnection 
+		PreparedStatement requete = laConnexion.prepareStatement("select * from Produit ");
+		ResultSet res = requete.executeQuery();
+		
+		try {
+			while (res.next()) {  // tant qu'il y a une ligne 
+				int idProduit = res.getInt("id"); //je prend mon id que j'enregistre dans ma varible idProduit
+				String nom = res.getString("nom"); //je prends dans la colonne libelle ma don
+				int stock =res.getInt("stock");
+				double tarif = res.getDouble("tarif"); //je prends dans la colonne taux ma donnée 
+				int idTva = res.getInt("tva");
+				//daotva = DAOTva.getInstance();
+				//tva = daotva.getById(idTva);
+				
+				Produit produit = new Produit(nom, tarif, stock,idTva);
+				produit.setId(idProduit);
+				System.out.println(produit.getTva());
+				list.add(produit);				
+			}	
+			if (res != null)
+				res.close();
+			if (requete != null)
+				requete.close();
+			
+		} catch (SQLException sqle) {
+			System.out.println("Pb select " + sqle.toString());
+		}
+		return list; // l'objet tva est crée et il est retourné
 	}
 
 }

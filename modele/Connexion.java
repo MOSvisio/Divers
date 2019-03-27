@@ -9,6 +9,7 @@ public class Connexion {
 	
 	private static Connexion instance;
 	
+	
 	public static Connexion getInstance(){
 		if(instance == null){
 			instance = new Connexion();

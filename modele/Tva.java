@@ -1,6 +1,10 @@
 package modele;
 
 
+import java.util.List;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import dao.ProduitDAO;
 import dao.TvaDAO;
 import javafx.collections.FXCollections;
@@ -18,6 +22,7 @@ public class Tva {
 		this.libelle = libelle;
 	}
 
+
 	public double getTaux() {return taux;}
 	public void setTaux(double taux) {this.taux = taux;}
 	public String getLibelle() {return libelle;}
@@ -28,15 +33,14 @@ public class Tva {
 	public static ObservableList<Tva> getList(){
 		dao = TvaDAO.getInstance();
 		ObservableList<Tva> list = FXCollections.observableArrayList(); 
-		for(int i=0; i<10; i++){
-			if(dao.getById(i) != null){
-				Tva test = dao.getById(i);
-				test.setId(i);
-				if(test != null) {
-					list.add(test);
-				}
-			}
+		List<Tva> temp = null;
+		try {
+			temp = dao.getAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		list.addAll(temp);
 		return list;
 	}
 	

@@ -1,11 +1,16 @@
 package controller;
 
-import application.main;
+import dao.ProduitDAO;
+import dao.TvaDAO;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +29,28 @@ import modele.Produit;
 import modele.Tva;
 
 
-public class ctrAccueil {
+public class ctrAccueil implements Initializable, ChangeListener<Produit> {
+	
+	public ObservableList<Produit> data = FXCollections.observableArrayList();
+	public ObservableList<Tva> data2 = FXCollections.observableArrayList();
+
+	@FXML private Button btnAddProd;
+	@FXML private Button btnModProd;
+	@FXML private Button btnDelProd;
+		
+	@FXML private TableView<Tva> tblTva;
+	@FXML private TableColumn<Tva, Integer> colIdTva = new TableColumn<>("id");
+	@FXML private TableColumn<Tva, String> colLibTva = new TableColumn<>("Libellé");
+	@FXML private TableColumn<Tva, Double> colTauxTva = new TableColumn<>("Taux");
+	
+	@FXML private TableView<Produit> tblProduit;
+	@FXML private TableColumn<Produit, Integer> colIdProduit = new TableColumn<>("ID");
+	@FXML private TableColumn<Produit, String> colLibProduit = new TableColumn<>("Libellé");
+	@FXML private TableColumn<Produit, Double> colTarifProduit = new TableColumn<>("Tarif");
+	@FXML private TableColumn<Produit, Integer> colTvaProduit = new TableColumn<>("Tva");
+	@FXML private TableColumn<Produit, Integer> colStockProduit = new TableColumn<>("Stock");
+
+	
 	
 	public void showAddProd(ActionEvent event) throws IOException {
 		Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/Scene_ajout_produit.fxml"));
@@ -60,6 +86,72 @@ public class ctrAccueil {
 		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
 		window.setScene(tableViewScene);
 		window.show();
+	}
+	
+	
+	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		this.btnDelProd.setDisable(true);
+		this.btnModProd.setDisable(true);
+		
+		colIdProduit.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id"));	
+		colLibProduit.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));	
+		colTarifProduit.setCellValueFactory(new PropertyValueFactory<Produit, Double>("tarif"));	
+		colTvaProduit.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("Tva"));
+		colStockProduit.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("stock"));
+
+		this.tblProduit.getColumns().setAll(colIdProduit, colLibProduit, colTarifProduit, colTvaProduit, colStockProduit);
+		
+		this.tblProduit.getSelectionModel().selectedItemProperty().addListener(this);
+
+		ProduitDAO res = ProduitDAO.getInstance();
+		List<Produit> requete_all = null;
+		try {
+			requete_all = res.getAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(requete_all.toString());
+		data.addAll(requete_all);
+		tblProduit.getItems().addAll(data);
+
+		colLibTva.setCellValueFactory(
+				new PropertyValueFactory<Tva, String>("libelle"));
+		colIdTva.setCellValueFactory(
+				new PropertyValueFactory<Tva, Integer>("id"));
+		colTauxTva.setCellValueFactory(
+				new PropertyValueFactory<Tva, Double>("taux"));
+		this.tblTva.getColumns().setAll(colIdTva, colLibTva, colTauxTva);
+		TvaDAO rest = TvaDAO.getInstance();
+		List<Tva> requete_allt = null;
+		try {
+			requete_allt = rest.getAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		data2.addAll(requete_allt);
+		tblTva.getItems().addAll(data2);
+		
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends Produit> observable, Produit oldValue, Produit newValue) {
+		this.btnDelProd.setDisable(false);
+		this.btnModProd.setDisable(false);
+	}
+	
+	public void clickBtnDelProd(ActionEvent event) throws IOException {
+		Produit selectedItem = this.tblProduit.getSelectionModel().getSelectedItem();
+		System.out.println("bi");
+		selectedItem.supprimerDansBdd();
+	    tblProduit.getItems().remove(selectedItem);
+		this.btnDelProd.setDisable(true);
+		this.btnModProd.setDisable(true);
 	}
 	
 

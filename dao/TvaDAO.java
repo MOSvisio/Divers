@@ -117,4 +117,37 @@ public class TvaDAO implements DAO<Tva>{
 		}
 		return 0;
 	}
+	
+	
+	public List<Tva> getAll() throws SQLException {
+		
+		List<Tva> list = new ArrayList<Tva>();
+		TvaDAO daotva = null;
+		Connection laConnexion = Connexion.getInstance().creeConnexion(); // la connexion existe dans le singleton et je vais chercher ma Connection avec le getConnection 
+		PreparedStatement requete = laConnexion.prepareStatement("select * from Tva ");
+		ResultSet res = requete.executeQuery();
+		
+		try {
+			while (res.next()) {  // tant qu'il y a une ligne 
+				int id = res.getInt("id"); //je prend mon id que j'enregistre dans ma varible idProduit
+				String libelle = res.getString("libelle"); //je prends dans la colonne libelle ma don
+				double taux = res.getDouble("taux"); //je prends dans la colonne taux ma donnée 
+				//daotva = DAOTva.getInstance();
+				//tva = daotva.getById(idTva);
+				
+				Tva tva = new Tva(taux, libelle);
+				tva.setId(id);
+				Tva tmp = tva;
+				list.add(tmp);				
+			}	
+			if (res != null)
+				res.close();
+			if (requete != null)
+				requete.close();
+			
+		} catch (SQLException sqle) {
+			System.out.println("Pb select " + sqle.toString());
+		}
+		return list; // l'objet tva est crée et il est retourné
+	}
 }
