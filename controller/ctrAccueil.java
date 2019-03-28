@@ -23,7 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
@@ -37,6 +36,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	
 	public ObservableList<Produit> data = FXCollections.observableArrayList();
 	public ObservableList<Tva> data2 = FXCollections.observableArrayList();
+	public ObservableList<Produit> data3 = FXCollections.observableArrayList();
 
 	@FXML private Button btnAddProd;
 	@FXML private Button btnModProd;
@@ -48,11 +48,24 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	@FXML private Button btnModTva;
 	@FXML private Button btnDelTva;
 		
-		
 	@FXML private TableView<Tva> tblTva;
 	@FXML private TableColumn<Tva, Integer> colIdTva = new TableColumn<>("id");
 	@FXML private TableColumn<Tva, String> colLibTva = new TableColumn<>("Libellé");
 	@FXML private TableColumn<Tva, Double> colTauxTva = new TableColumn<>("Taux");
+	
+	@FXML private TableView<Produit> tblProduitVente;
+	@FXML private TableColumn<Produit, String> colLibPV = new TableColumn<>("Libellé");
+	@FXML private TableColumn<Produit, Double> colTarifPV = new TableColumn<>("Tarif");
+	@FXML private TableColumn<Produit, Integer> colStockPV = new TableColumn<>("Stock");
+	@FXML private TableColumn<Produit, Integer> colTvaPV = new TableColumn<>("Tva");
+	
+	@FXML private TableView<Produit> tblAchatVente;
+	@FXML private TableColumn<Produit, String> colLibVente = new TableColumn<>("Libellé");
+	@FXML private TableColumn<Produit, Double> colTarifVente = new TableColumn<>("Tarif");
+	@FXML private TableColumn<Produit, Integer> colQuantiteVente = new TableColumn<>("Quantité");
+	@FXML private TableColumn<Produit, Integer> colTvaVente = new TableColumn<>("Tva");
+	@FXML private TableColumn<Produit, Double> colPrixVente = new TableColumn<>("Sous total");
+	
 	
 	@FXML private TableView<Produit> tblProduit;
 	@FXML private TableColumn<Produit, Integer> colIdProduit = new TableColumn<>("ID");
@@ -168,12 +181,9 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		data.addAll(requete_all);
 		tblProduit.getItems().addAll(data);
 
-		colLibTva.setCellValueFactory(
-				new PropertyValueFactory<Tva, String>("libelle"));
-		colIdTva.setCellValueFactory(
-				new PropertyValueFactory<Tva, Integer>("id"));
-		colTauxTva.setCellValueFactory(
-				new PropertyValueFactory<Tva, Double>("taux"));
+		colLibTva.setCellValueFactory(new PropertyValueFactory<Tva, String>("libelle"));
+		colIdTva.setCellValueFactory(new PropertyValueFactory<Tva, Integer>("id"));
+		colTauxTva.setCellValueFactory(new PropertyValueFactory<Tva, Double>("taux"));
 		this.tblTva.getColumns().setAll(colIdTva, colLibTva, colTauxTva);
 		TvaDAO rest = TvaDAO.getInstance();
 		List<Tva> requete_allt = null;
@@ -184,7 +194,25 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 			e.printStackTrace();
 		}
 		data2.addAll(requete_allt);
-		tblTva.getItems().addAll(data2);
+		tblTva.getItems().addAll(data2);	
+		
+		colLibPV.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));	
+		colTarifPV.setCellValueFactory(new PropertyValueFactory<Produit, Double>("Tarif"));	
+		colStockPV.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("Stock"));
+		colTvaPV.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("Tva"));
+
+		this.tblProduitVente.getColumns().setAll(colLibPV, colTarifPV, colStockPV, colTvaPV);
+		this.tblProduitVente.getSelectionModel().selectedItemProperty().addListener(this);
+
+		requete_all = null;
+		try {
+			requete_all = res.getAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		data3.addAll(requete_all);
+		tblProduitVente.getItems().addAll(data3);
 		
 	}
 
@@ -217,5 +245,19 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		this.btnModTva.setDisable(true);
 	}
 	
+	public void AjoutVente(){
+		
+	}
+	
+	public void RetraitVente(){
+		
+	}
+	
+	public void ValidationVente(){
+		
+	}
+	public void AnnulationVente(){
+		
+	}
 
 }

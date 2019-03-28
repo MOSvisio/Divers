@@ -42,9 +42,7 @@ public class ctrProduit implements Initializable{
 		String nom = this.txtNom.getText();
 		double tarif =Double.parseDouble(this.txtTarif.getText());
 		int stock = Integer.parseInt(this.txtQuantite.getText());
-		Tva recup = this.listTva.getSelectionModel().getSelectedItem();
-		System.out.println(recup.getLibelle());
-		
+		Tva recup = this.listTva.getSelectionModel().getSelectedItem();		
 		
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation");

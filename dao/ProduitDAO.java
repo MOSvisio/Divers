@@ -153,7 +153,6 @@ public class ProduitDAO implements DAO<Produit>{
 				
 				Produit produit = new Produit(nom, tarif, stock,idTva);
 				produit.setId(idProduit);
-				System.out.println(produit.getTva());
 				list.add(produit);				
 			}	
 			if (res != null)
