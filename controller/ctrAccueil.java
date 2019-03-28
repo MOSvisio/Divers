@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -20,9 +21,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import modele.Produit;
@@ -37,6 +41,13 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	@FXML private Button btnAddProd;
 	@FXML private Button btnModProd;
 	@FXML private Button btnDelProd;
+	@FXML private Button btnReaProd;
+	
+
+	@FXML private Button btnAddTva;
+	@FXML private Button btnModTva;
+	@FXML private Button btnDelTva;
+		
 		
 	@FXML private TableView<Tva> tblTva;
 	@FXML private TableColumn<Tva, Integer> colIdTva = new TableColumn<>("id");
@@ -88,6 +99,38 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		window.show();
 	}
 	
+	public void showReaProd(ActionEvent event) throws IOException {
+		boolean isValid = false;
+		
+		while(!isValid){
+			TextInputDialog inDialog = new TextInputDialog("0");
+
+			inDialog.setTitle("Réapprovisionnement");
+			inDialog.setHeaderText("Quantité à réapprovisionner");
+			inDialog.setContentText("Quantité :");
+			
+			Optional<String> textIn = inDialog.showAndWait();
+			
+			
+			try { 
+				int res = Integer.parseInt(textIn.get());
+				if(res > 0){
+					isValid = true;
+				}
+			}
+			catch(NumberFormatException nfe) {
+				isValid = false;
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Erreur de saisie");
+			}
+
+			if(textIn.isPresent() && isValid){
+				Produit selectedItem = this.tblProduit.getSelectionModel().getSelectedItem();
+				selectedItem.reapprovisionner(Integer.parseInt(textIn.get()));
+				tblProduit.refresh();
+			}
+		}
+	}
 	
 	
 
@@ -96,6 +139,9 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	public void initialize(URL url, ResourceBundle rb) {
 		this.btnDelProd.setDisable(true);
 		this.btnModProd.setDisable(true);
+		this.btnReaProd.setDisable(true);
+		this.btnDelTva.setDisable(true);
+		this.btnModTva.setDisable(true);
 		
 		colIdProduit.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id"));	
 		colLibProduit.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));	
@@ -106,6 +152,10 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		this.tblProduit.getColumns().setAll(colIdProduit, colLibProduit, colTarifProduit, colTvaProduit, colStockProduit);
 		
 		this.tblProduit.getSelectionModel().selectedItemProperty().addListener(this);
+		this.tblTva.getSelectionModel().selectedItemProperty().addListener((observable,oldvalue,newvalue)->{
+			this.btnDelTva.setDisable(false);
+			this.btnModTva.setDisable(false);
+		});
 
 		ProduitDAO res = ProduitDAO.getInstance();
 		List<Produit> requete_all = null;
@@ -115,7 +165,6 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(requete_all.toString());
 		data.addAll(requete_all);
 		tblProduit.getItems().addAll(data);
 
@@ -143,15 +192,29 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	public void changed(ObservableValue<? extends Produit> observable, Produit oldValue, Produit newValue) {
 		this.btnDelProd.setDisable(false);
 		this.btnModProd.setDisable(false);
+		this.btnReaProd.setDisable(false);
 	}
+	
+	/*public void changed(ObservableValue<? extends Tva> observable, Tva oldValue, Tva newValue) {
+		this.btnDelProd.setDisable(false);
+		this.btnModProd.setDisable(false);
+	}*/
 	
 	public void clickBtnDelProd(ActionEvent event) throws IOException {
 		Produit selectedItem = this.tblProduit.getSelectionModel().getSelectedItem();
-		System.out.println("bi");
 		selectedItem.supprimerDansBdd();
 	    tblProduit.getItems().remove(selectedItem);
 		this.btnDelProd.setDisable(true);
 		this.btnModProd.setDisable(true);
+		this.btnReaProd.setDisable(true);
+	}
+	
+	public void clickBtnDelTva(ActionEvent event) throws IOException {
+		Tva selectedItem = this.tblTva.getSelectionModel().getSelectedItem();
+		selectedItem.supprimerDansBdd();
+	    tblTva.getItems().remove(selectedItem);
+		this.btnDelTva.setDisable(true);
+		this.btnModTva.setDisable(true);
 	}
 	
 

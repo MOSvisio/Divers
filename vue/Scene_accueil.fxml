@@ -26,7 +26,7 @@
                         <Button fx:id="btnAddProd" mnemonicParsing="false" onAction="#showAddProd" prefWidth="100.0" text="Ajouter" />
                         <Button fx:id="btnDelProd" mnemonicParsing="false" onAction="#clickBtnDelProd" prefWidth="100.0" text="Retirer" />
                         <Button fx:id="btnModProd" mnemonicParsing="false" onAction="#showModProd" prefWidth="100.0" text="Modifier" />
-                        <Button fx:id="btnReaProd" mnemonicParsing="false" prefWidth="100.0" text="Réapproviser" />
+                        <Button fx:id="btnReaProd" mnemonicParsing="false" onAction="#showReaProd" prefWidth="100.0" text="Réapproviser" />
                      </children>
                   </FlowPane>
                </left>
@@ -58,7 +58,7 @@
                   <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="344.0" prefWidth="131.0" vgap="50.0" BorderPane.alignment="CENTER">
                      <children>
                         <Button fx:id="btnAddTva" mnemonicParsing="false" onAction="#showAddTva" prefWidth="100.0" text="Ajouter" />
-                        <Button fx:id="btnDelTva" mnemonicParsing="false" prefWidth="100.0" text="Retirer" />
+                        <Button fx:id="btnDelTva" mnemonicParsing="false" onAction="#clickBtnDelTva" prefWidth="100.0" text="Retirer" />
                         <Button fx:id="btnModTva" mnemonicParsing="false" onAction="#showModTva" prefWidth="100.0" text="Modifier" />
                      </children>
                   </FlowPane>

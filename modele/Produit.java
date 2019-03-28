@@ -59,16 +59,19 @@ public class Produit implements Comparable<Produit>{
 	public int vente(int v){
 		if(this.stock >= v && v>0){
 			setStock(this.stock-v);
+			dao.update(this);
 			return v;
 		} else if (this.stock < v && v > 0){
 			v = v - (v-this.stock);
 			System.out.println("il n'y avait que : " + this.stock + " produits disponibles");
 			setStock(this.stock-v);
+			dao.update(this);
 			return v;
 		} else{
 			System.out.println("Stock indisponible");
 			return 0;
 		}
+		
 	}
 	
 	public void creerDansBdd() {

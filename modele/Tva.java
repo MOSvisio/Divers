@@ -18,6 +18,7 @@ public class Tva {
 	
 	
 	public Tva(double taux, String libelle) {
+		dao = TvaDAO.getInstance();
 		this.taux = taux;
 		this.libelle = libelle;
 	}
@@ -45,8 +46,12 @@ public class Tva {
 	}
 	
 	public void creerDansBdd() {
-		dao = TvaDAO.getInstance();
+		
 		dao.create(this);
+	}
+	
+	public void supprimerDansBdd(){
+		dao.delete(this);
 	}
 	
 	public static Tva getTvaById(int i) {
