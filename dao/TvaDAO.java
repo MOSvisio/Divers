@@ -83,10 +83,9 @@ public class TvaDAO implements DAO<Tva>{
 	public void delete(Tva objet) {
 		try{
 			Connection laConnexion = Connexion.getInstance().creeConnexion();
-			PreparedStatement requete = laConnexion.prepareStatement("DELETE FROM Tva WHERE libelle = " + objet);  
+			PreparedStatement requete = laConnexion.prepareStatement("DELETE FROM Tva WHERE id = " + objet.getId());  
 			requete.executeUpdate();		
-			if(requete != null)
-				requete.close();
+			requete.close();
 			if(laConnexion != null)
 				laConnexion.close();	
 		} catch (SQLException sqle){

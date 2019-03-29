@@ -86,8 +86,16 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	}
 	
 	public void showModTva(ActionEvent event) throws IOException {
-		Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/Scene_modif_tva.fxml"));
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/vue/Scene_modif_tva.fxml"));
+		Parent tableViewParent = loader.load();
+		
 		Scene tableViewScene = new Scene(tableViewParent);
+		
+		//accède au controller et appelle une méthode
+		
+		ctrModifTva controller = loader.getController();
+		controller.initData(tblTva.getSelectionModel().getSelectedItem());
 		
 		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
 		window.setScene(tableViewScene);
@@ -103,15 +111,24 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		window.show();
 	}
 	
+	//récupère le produit sélectionné dans la table view et le passe dans la fenêtre de modif produit
 	public void showModProd(ActionEvent event) throws IOException {
-		Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/Scene_modif_produit.fxml"));
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/vue/Scene_modif_produit.fxml"));
+		Parent tableViewParent = loader.load();
+		
 		Scene tableViewScene = new Scene(tableViewParent);
+		
+		//accède au controller et appelle une méthode
+		
+		ctrModifProduit controller = loader.getController();
+		controller.initData(tblProduit.getSelectionModel().getSelectedItem());
 		
 		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
 		window.setScene(tableViewScene);
 		window.show();
 	}
-	
+	//fenêtre de réapprovisionnement produit
 	public void showReaProd(ActionEvent event) throws IOException {
 		boolean isValid = false;
 		
@@ -119,7 +136,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 			TextInputDialog inDialog = new TextInputDialog("0");
 
 			inDialog.setTitle("Réapprovisionnement");
-			inDialog.setHeaderText("Quantité à réapprovisionner");
+			inDialog.setHeaderText("Veuillez entrer la quantité à réapprovisionner");
 			inDialog.setContentText("Quantité :");
 			
 			Optional<String> textIn = inDialog.showAndWait();
@@ -146,7 +163,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	}
 	
 	
-
+	//initialise les deux tableview
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -215,7 +232,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		tblProduitVente.getItems().addAll(data3);
 		
 	}
-
+	//récupère les changements sur la tableView Produit
 	@Override
 	public void changed(ObservableValue<? extends Produit> observable, Produit oldValue, Produit newValue) {
 		this.btnDelProd.setDisable(false);

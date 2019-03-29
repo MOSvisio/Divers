@@ -63,4 +63,10 @@ public class Tva {
     public String toString()  {
         return "Tva " + this.getLibelle() + " taux à " + this.taux;
     }
+	
+	public void modifierTva(String nom, double taux){
+		setLibelle(nom);
+		setTaux(taux);
+		dao.update(this);
+	}
 }

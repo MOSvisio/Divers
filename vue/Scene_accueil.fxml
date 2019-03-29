@@ -54,7 +54,7 @@
                   <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="344.0" prefWidth="131.0" vgap="50.0" BorderPane.alignment="CENTER">
                      <children>
                         <Button fx:id="btnAddTva" mnemonicParsing="false" onAction="#showAddTva" prefWidth="100.0" text="Ajouter" />
-                        <Button fx:id="btnDelTva" mnemonicParsing="false" prefWidth="100.0" text="Retirer" />
+                        <Button fx:id="btnDelTva" mnemonicParsing="false" onAction="#clickBtnDelTva" prefWidth="100.0" text="Retirer" />
                         <Button fx:id="btnModTva" mnemonicParsing="false" onAction="#showModTva" prefWidth="100.0" text="Modifier" />
                      </children>
                   </FlowPane>
