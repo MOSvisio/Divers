@@ -24,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -146,6 +147,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 				inDialog.setContentText("Quantité :");
 				
 				Optional<String> textIn = inDialog.showAndWait();
+
 				try { 
 					int res = Integer.parseInt(textIn.get());
 					if(res > 0){
@@ -184,6 +186,8 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		this.btnReaProd.setDisable(true);
 		this.btnDelTva.setDisable(true);
 		this.btnModTva.setDisable(true);
+		this.btnAjoutVente.setDisable(true);
+		this.btnRetirerVente.setDisable(true);
 		
 		colIdProduit.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id"));	
 		colLibProduit.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));	
@@ -232,7 +236,15 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 
 		this.tblProduitVente.getColumns().setAll(colLibPV, colTarifPV, colStockPV, colTvaPV);
 		this.tblProduitVente.getSelectionModel().selectedItemProperty().addListener(this);
-
+		
+		this.tblProduitVente.getSelectionModel().selectedItemProperty().addListener((observable,oldvalue,newvalue)->{
+			this.btnAjoutVente.setDisable(false);
+		});
+		
+		this.listAchat.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newvalue)->{
+			this.btnRetirerVente.setDisable(false);
+		});
+		
 		requete_all = null;
 		try {
 			requete_all = res.getAll();
@@ -252,10 +264,6 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		this.btnReaProd.setDisable(false);
 	}
 	
-	/*public void changed(ObservableValue<? extends Tva> observable, Tva oldValue, Tva newValue) {
-		this.btnDelProd.setDisable(false);
-		this.btnModProd.setDisable(false);
-	}*/
 	
 	public void clickBtnDelProd(ActionEvent event) throws IOException {
 		Produit selectedItem = this.tblProduit.getSelectionModel().getSelectedItem();
@@ -326,13 +334,13 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
             System.out.format("key: %s, value: %d%n", k, v);
         });	
 		tblProduit.refresh();
-		tblProduitVente.refresh();
-		listAchat.setDisable(true);
-		
+		tblProduitVente.refresh();		
 		btnAjoutVente.setDisable(true);
 		btnRetirerVente.setDisable(true);
-		btnAnnulerVente.setDisable(true);
-		btnValiderVente.setDisable(true);
+		
+		listeCourse.getMap().clear();
+		listAchat.getItems().clear();
+		prixTotal.setText("");
 		
 	}
 	

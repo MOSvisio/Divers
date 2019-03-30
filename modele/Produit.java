@@ -2,6 +2,8 @@ package modele;
 
 import dao.ProduitDAO;
 import dao.TvaDAO;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class Produit implements Comparable<Produit>{
 	
@@ -60,9 +62,26 @@ public class Produit implements Comparable<Produit>{
 			return v;
 		} else if (this.stock < v && v > 0){
 			v = v - (v-this.stock);
-			System.out.println("il n'y avait que : " + this.stock + " produits disponibles");
 			setStock(this.stock-v);
 			return v;
+		} else{
+			System.out.println("Stock indisponible");
+			return 0;
+		}
+		
+	}
+	
+	
+	public int venteTest(int v){
+		if(this.stock >= v && v>0){
+			return v;
+		} else if (this.stock < v && v > 0){
+			v = v - (v-this.stock);
+			Alert dialogE = new Alert(AlertType.ERROR);
+			dialogE.setTitle("Quantité achetée trop importante");
+			dialogE.setHeaderText("Stock insuffisant");
+			dialogE.setContentText("Il ne restait que " + this.stock + " produits disponibles");
+			dialogE.showAndWait();			return v;
 		} else{
 			System.out.println("Stock indisponible");
 			return 0;

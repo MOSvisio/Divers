@@ -22,6 +22,7 @@ public class Achat {
 	
 	public void AjoutAchat(Produit p, int q){
 		if(this.ProduiQuant.get(p)==null){
+			q = p.venteTest(q);
 			this.setTarif(p.getTarif() * (1 + (Tva.getTvaById(p.getTva()).getTaux()/100.0)) * q);
 			this.ProduiQuant.put(p, q);
 		}

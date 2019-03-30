@@ -19,6 +19,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import modele.Produit;
 import modele.Tva;
@@ -39,29 +40,47 @@ public class ctrProduit implements Initializable{
 	private ComboBox<Tva> listTva; // à changer pour une liste déroulante de choix appel la listTva
 	
 	public void afficherModele(ActionEvent event) throws IOException {
-		String nom = this.txtNom.getText();
-		double tarif =Double.parseDouble(this.txtTarif.getText());
-		int stock = Integer.parseInt(this.txtQuantite.getText());
-		Tva recup = this.listTva.getSelectionModel().getSelectedItem();		
-		
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation");
-		alert.setHeaderText(null);
-		alert.setContentText("Voulez-vous créer : " + nom + ' ' + tarif + "€, stock : " + stock + " tva : " + recup.getId() + "?");
-		Optional<ButtonType> answer = alert.showAndWait();
-		
-		if(answer.get() == ButtonType.OK){
-			Produit ajout = new Produit(nom, tarif, stock, recup.getId());
-			ajout.creerDansBdd();
+		try {
+			String nom = this.txtNom.getText();
+			double tarif =Double.parseDouble(this.txtTarif.getText());
+			int stock = Integer.parseInt(this.txtQuantite.getText());
+			Tva recup = this.listTva.getSelectionModel().getSelectedItem();	
+
+		    if(nom.matches("[0-9]+") || nom.trim().length() == 0){
+		    	throw new IllegalArgumentException();
+		    }
+		    if(tarif < 0 || stock < 0){
+		    	throw new IllegalArgumentException();
+		    }
+		    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.setTitle("Confirmation");
+			alert.setHeaderText(null);
+			alert.setContentText("Voulez-vous créer : " + nom + ' ' + tarif + "€, stock : " + stock + " tva : " + recup.getId() + "?");
+			Optional<ButtonType> answer = alert.showAndWait();
 			
-			Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/Scene_Accueil.fxml"));
-			Scene tableViewScene = new Scene(tableViewParent);
+			if(answer.get() == ButtonType.OK){
+				Produit ajout = new Produit(nom, tarif, stock, recup.getId());
+				ajout.creerDansBdd();
+				
+				Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/Scene_Accueil.fxml"));
+				Scene tableViewScene = new Scene(tableViewParent);
+				
+				//la ligne suivante sers à récupérer l'évenement sous forme de fenêtre, sinon impossible de l'utiliser
+				Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+				window.setScene(tableViewScene);
+				window.show();
+			}
 			
-			//la ligne suivante sers à récupérer l'évenement sous forme de fenêtre, sinon impossible de l'utiliser
-			Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-			window.setScene(tableViewScene);
-			window.show();
+		} catch(Exception e) {
+			Alert dialogE = new Alert(AlertType.ERROR);
+			dialogE.setTitle("Erreur dans la modification de Produit");
+			dialogE.setHeaderText("Modification non enregistrée");
+			dialogE.setContentText("Erreur : Modification non valide");
+			dialogE.showAndWait();
 		}
+			
+		
+		
 		
 	}
 	
