@@ -31,7 +31,6 @@ public class Produit implements Comparable<Produit>{
 	
 	public void setStock(int stock) {
 		this.stock = stock;
-		dao.update(this);
 	}
 	
 	public int getTva() {return tva;}
@@ -39,13 +38,12 @@ public class Produit implements Comparable<Produit>{
 
 	public String toString(){
 		daotva = TvaDAO.getInstance();
-		return "id : "  + this.id + " nom : " + this.nom + " stock disponible : " + this.stock + " prix : " + this.tarif + " taux de TVA : " + this.tva; 
+		return "nom : " + this.nom + " prix : " + this.tarif + " taux de TVA : " + this.tva; 
 	}
 	
 	public void reapprovisionner(int rea){
 		if(rea > 0)
 			setStock(getStock() + rea);
-			dao.update(this);
 	}
 	
 	public void modifierProduit(String nom, double tarif, int stock, int tva){
@@ -59,13 +57,11 @@ public class Produit implements Comparable<Produit>{
 	public int vente(int v){
 		if(this.stock >= v && v>0){
 			setStock(this.stock-v);
-			dao.update(this);
 			return v;
 		} else if (this.stock < v && v > 0){
 			v = v - (v-this.stock);
 			System.out.println("il n'y avait que : " + this.stock + " produits disponibles");
 			setStock(this.stock-v);
-			dao.update(this);
 			return v;
 		} else{
 			System.out.println("Stock indisponible");
@@ -80,6 +76,10 @@ public class Produit implements Comparable<Produit>{
 
 	public void supprimerDansBdd(){
 		dao.delete(this);
+	}
+	
+	public void updaterDansBdd(){
+		dao.update(this);
 	}
 	
 	@Override

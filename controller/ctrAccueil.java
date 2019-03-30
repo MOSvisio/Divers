@@ -22,12 +22,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import modele.Achat;
 import modele.Produit;
 import modele.Tva;
 
@@ -37,11 +41,19 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	public ObservableList<Produit> data = FXCollections.observableArrayList();
 	public ObservableList<Tva> data2 = FXCollections.observableArrayList();
 	public ObservableList<Produit> data3 = FXCollections.observableArrayList();
+	
+	private Achat listeCourse;
 
 	@FXML private Button btnAddProd;
 	@FXML private Button btnModProd;
 	@FXML private Button btnDelProd;
 	@FXML private Button btnReaProd;
+	@FXML private Button btnAjoutVente;
+	@FXML private Button btnRetirerVente;
+	@FXML private Button btnAnnulerVente;
+	@FXML private Button btnValiderVente;
+	
+	@FXML private Label prixTotal;
 	
 
 	@FXML private Button btnAddTva;
@@ -59,12 +71,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	@FXML private TableColumn<Produit, Integer> colStockPV = new TableColumn<>("Stock");
 	@FXML private TableColumn<Produit, Integer> colTvaPV = new TableColumn<>("Tva");
 	
-	@FXML private TableView<Produit> tblAchatVente;
-	@FXML private TableColumn<Produit, String> colLibVente = new TableColumn<>("Libellé");
-	@FXML private TableColumn<Produit, Double> colTarifVente = new TableColumn<>("Tarif");
-	@FXML private TableColumn<Produit, Integer> colQuantiteVente = new TableColumn<>("Quantité");
-	@FXML private TableColumn<Produit, Integer> colTvaVente = new TableColumn<>("Tva");
-	@FXML private TableColumn<Produit, Double> colPrixVente = new TableColumn<>("Sous total");
+	@FXML private ListView<Produit> listAchat;
 	
 	
 	@FXML private TableView<Produit> tblProduit;
@@ -129,37 +136,40 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		window.show();
 	}
 	//fenêtre de réapprovisionnement produit
-	public void showReaProd(ActionEvent event) throws IOException {
-		boolean isValid = false;
-		
-		while(!isValid){
-			TextInputDialog inDialog = new TextInputDialog("0");
+		public void showReaProd(ActionEvent event) throws IOException {
+			boolean isValid = false;
+			
+			while(!isValid){
+				TextInputDialog inDialog = new TextInputDialog("0");
+				inDialog.setTitle("Réapprovisionnement");
+				inDialog.setHeaderText("Veuillez entrer la quantité à réapprovisionner");
+				inDialog.setContentText("Quantité :");
+				
+				Optional<String> textIn = inDialog.showAndWait();
+				try { 
+					int res = Integer.parseInt(textIn.get());
+					if(res > 0){
+						isValid = true;
+					}
+				}
+				catch(NumberFormatException nfe) {
+					isValid = false;
+				}
 
-			inDialog.setTitle("Réapprovisionnement");
-			inDialog.setHeaderText("Veuillez entrer la quantité à réapprovisionner");
-			inDialog.setContentText("Quantité :");
-			
-			Optional<String> textIn = inDialog.showAndWait();
-			
-			
-			try { 
-				int res = Integer.parseInt(textIn.get());
-				if(res > 0){
-					isValid = true;
+				if(textIn.isPresent() && isValid){
+					Produit selectedItem = this.tblProduit.getSelectionModel().getSelectedItem();
+					selectedItem.reapprovisionner(Integer.parseInt(textIn.get()));
+					selectedItem.updaterDansBdd();
+					tblProduit.refresh();
+				}
+				else if(isValid == false){
+					Alert dialogE = new Alert(AlertType.ERROR);
+					dialogE.setTitle("Erreur dans le réapprovisionnement produit");
+					dialogE.setHeaderText("Modification non enregistrée");
+					dialogE.setContentText("Erreur : Modification non valide");
+					dialogE.showAndWait();
 				}
 			}
-			catch(NumberFormatException nfe) {
-				isValid = false;
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Erreur de saisie");
-			}
-
-			if(textIn.isPresent() && isValid){
-				Produit selectedItem = this.tblProduit.getSelectionModel().getSelectedItem();
-				selectedItem.reapprovisionner(Integer.parseInt(textIn.get()));
-				tblProduit.refresh();
-			}
-		}
 	}
 	
 	
@@ -167,6 +177,8 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		listeCourse = new Achat();
+		
 		this.btnDelProd.setDisable(true);
 		this.btnModProd.setDisable(true);
 		this.btnReaProd.setDisable(true);
@@ -214,8 +226,8 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		tblTva.getItems().addAll(data2);	
 		
 		colLibPV.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));	
-		colTarifPV.setCellValueFactory(new PropertyValueFactory<Produit, Double>("Tarif"));	
-		colStockPV.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("Stock"));
+		colTarifPV.setCellValueFactory(new PropertyValueFactory<Produit, Double>("tarif"));	
+		colStockPV.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("stock"));
 		colTvaPV.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("Tva"));
 
 		this.tblProduitVente.getColumns().setAll(colLibPV, colTarifPV, colStockPV, colTvaPV);
@@ -263,17 +275,75 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 	}
 	
 	public void AjoutVente(){
+		boolean isValid = false;
+		
+		while(!isValid){
+			TextInputDialog inDialog = new TextInputDialog("0");
+
+			inDialog.setTitle("Quantité");
+			inDialog.setHeaderText("Veuillez entrer la quantité à acheter");
+			inDialog.setContentText("Quantité :");
+			
+			Optional<String> textIn = inDialog.showAndWait();
+			
+			
+			try { 
+				int res = Integer.parseInt(textIn.get());
+				if(res > 0){
+					isValid = true;
+				}
+			}
+			catch(NumberFormatException nfe) {
+				isValid = false;
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Erreur de saisie");
+			}
+
+			if(textIn.isPresent() && isValid){
+				Produit selectedItem2 = this.tblProduitVente.getSelectionModel().getSelectedItem();
+				listeCourse.AjoutAchat(selectedItem2, Integer.parseInt(textIn.get()));
+				selectedItem2.vente(Integer.parseInt(textIn.get()));
+				listAchat.getItems().clear();
+				tblProduitVente.refresh();
+				listAchat.getItems().addAll(listeCourse.getMap().keySet());
+				prixTotal.setText("" + listeCourse.getTarif());
+			}
+		}
 		
 	}
 	
 	public void RetraitVente(){
-		
+		Produit selectedItem2 = this.listAchat.getSelectionModel().getSelectedItem();
+		listeCourse.RetirerAchat(selectedItem2);
+		listAchat.getItems().remove(selectedItem2);
+		prixTotal.setText("" + listeCourse.getTarif());
+		tblProduitVente.refresh();
 	}
 	
 	public void ValidationVente(){
+		listeCourse.getMap().forEach((k, v) -> {
+			k.updaterDansBdd();
+            System.out.format("key: %s, value: %d%n", k, v);
+        });	
+		tblProduit.refresh();
+		tblProduitVente.refresh();
+		listAchat.setDisable(true);
+		
+		btnAjoutVente.setDisable(true);
+		btnRetirerVente.setDisable(true);
+		btnAnnulerVente.setDisable(true);
+		btnValiderVente.setDisable(true);
 		
 	}
+	
 	public void AnnulationVente(){
+		listeCourse.getMap().forEach((k, v) -> {
+            k.reapprovisionner(v);
+        });	
+		listeCourse.getMap().clear();
+		listAchat.getItems().clear();
+		prixTotal.setText("");
+		tblProduitVente.refresh();
 		
 	}
 

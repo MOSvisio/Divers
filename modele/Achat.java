@@ -22,7 +22,7 @@ public class Achat {
 	
 	public void AjoutAchat(Produit p, int q){
 		if(this.ProduiQuant.get(p)==null){
-			this.setTarif(this.getTarif() + ((p.getTarif() * q) + (p.getTarif() * q * Tva.getTvaById(p.getId()).getTaux())));
+			this.setTarif(p.getTarif() * (1 + (Tva.getTvaById(p.getTva()).getTaux()/100.0)) * q);
 			this.ProduiQuant.put(p, q);
 		}
 	}
@@ -30,9 +30,14 @@ public class Achat {
 	public void RetirerAchat(Produit p){
 		if(this.ProduiQuant.get(p)!=null){
 			int q = this.ProduiQuant.get(p);
-			this.setTarif(this.getTarif() - ((p.getTarif() * q) + (p.getTarif() * q * Tva.getTvaById(p.getId()).getTaux())));
+			this.setTarif(-(p.getTarif() * (1 + (Tva.getTvaById(p.getTva()).getTaux()/100.0)) * q));
 			this.ProduiQuant.remove(p);
+			p.reapprovisionner(q);
 		}
+	}
+	
+	public HashMap<Produit, Integer> getMap(){
+		return this.ProduiQuant;
 	}
 	
 	public void Afficher(){
@@ -45,7 +50,13 @@ public class Achat {
 	}
 
 	public void setTarif(double d) {
-		Tarif = d;
+		if(d < 0){
+			Tarif = 0;
+		}
+		else {
+			Tarif += d;
+			Tarif = (double) Math.round(Tarif * 100) / 100;
+		}
 	}
 
 	public String getDateHeure() {
