@@ -163,6 +163,22 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 					selectedItem.reapprovisionner(Integer.parseInt(textIn.get()));
 					selectedItem.updaterDansBdd();
 					tblProduit.refresh();
+					
+					ProduitDAO res = ProduitDAO.getInstance();
+					List<Produit> requete_all = null;
+					try {
+						requete_all = res.getAll();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					tblProduitVente.getItems().clear();
+					
+					data3.clear();
+					data3.addAll(requete_all);
+					tblProduitVente.getItems().addAll(data3);
+					
 				}
 				else if(isValid == false){
 					Alert dialogE = new Alert(AlertType.ERROR);
@@ -272,6 +288,21 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		this.btnDelProd.setDisable(true);
 		this.btnModProd.setDisable(true);
 		this.btnReaProd.setDisable(true);
+		
+		ProduitDAO res = ProduitDAO.getInstance();
+		List<Produit> requete_all = null;
+		try {
+			requete_all = res.getAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		tblProduitVente.getItems().clear();
+		
+		data3.clear();
+		data3.addAll(requete_all);
+		tblProduitVente.getItems().addAll(data3);
 	}
 	
 	public void clickBtnDelTva(ActionEvent event) throws IOException {
@@ -324,7 +355,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		Produit selectedItem2 = this.listAchat.getSelectionModel().getSelectedItem();
 		listeCourse.RetirerAchat(selectedItem2);
 		listAchat.getItems().remove(selectedItem2);
-		prixTotal.setText("" + listeCourse.getTarif());
+		prixTotal.setText("" + listeCourse.getTarif());		
 		tblProduitVente.refresh();
 	}
 	
@@ -333,7 +364,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 			k.updaterDansBdd();
             System.out.format("key: %s, value: %d%n", k, v);
         });	
-		tblProduit.refresh();
+		
 		tblProduitVente.refresh();		
 		btnAjoutVente.setDisable(true);
 		btnRetirerVente.setDisable(true);
@@ -341,6 +372,20 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		listeCourse.getMap().clear();
 		listAchat.getItems().clear();
 		prixTotal.setText("");
+		
+		tblProduit.getItems().clear();
+		
+		ProduitDAO res = ProduitDAO.getInstance();
+		List<Produit> requete_all = null;
+		try {
+			requete_all = res.getAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		data.clear();
+		data.addAll(requete_all);
+		tblProduit.getItems().addAll(data);
 		
 	}
 	

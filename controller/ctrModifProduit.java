@@ -34,7 +34,6 @@ public class ctrModifProduit {
 	public void initData(Produit produit){
 		selectedProduct = produit;
 		int indexTva = selectedProduct.getTva();
-		System.out.println(indexTva);
 		txtNom.setText(selectedProduct.getNom());
 		txtTarif.setText(Double.toString(selectedProduct.getTarif()));
 		this.listTva.setValue(Tva.getTvaById(indexTva));
@@ -51,7 +50,7 @@ public class ctrModifProduit {
 			    if(val < 0){
 			    	throw new IllegalArgumentException();
 			    }
-			    selectedProduct.modifierProduit(txtNom.getText(), Double.parseDouble(txtTarif.getText()), selectedProduct.getStock(), this.listTva.getSelectionModel().getSelectedIndex()+1);
+			    selectedProduct.modifierProduit(txtNom.getText(), Double.parseDouble(txtTarif.getText()), selectedProduct.getStock(), this.listTva.getSelectionModel().getSelectedItem().getId());
 				showAccueil(event);
 				
 			} catch(Exception e) {

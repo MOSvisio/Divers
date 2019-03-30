@@ -76,12 +76,13 @@ public class Produit implements Comparable<Produit>{
 		if(this.stock >= v && v>0){
 			return v;
 		} else if (this.stock < v && v > 0){
-			v = v - (v-this.stock);
+			v = (this.stock);
 			Alert dialogE = new Alert(AlertType.ERROR);
 			dialogE.setTitle("Quantité achetée trop importante");
 			dialogE.setHeaderText("Stock insuffisant");
 			dialogE.setContentText("Il ne restait que " + this.stock + " produits disponibles");
-			dialogE.showAndWait();			return v;
+			dialogE.showAndWait();			
+			return v;
 		} else{
 			System.out.println("Stock indisponible");
 			return 0;
