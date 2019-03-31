@@ -30,6 +30,7 @@ public class ctrModifProduit {
 	
 	private Produit selectedProduct;
 	
+	
 	//initialise un produit à partir du produit sélectionné sur la page d'accueil
 	public void initData(Produit produit){
 		selectedProduct = produit;

@@ -31,6 +31,7 @@ public class TvaDAO implements DAO<Tva>{
 			ResultSet res = requete.executeQuery();
 			while(res.next()) {
 				tv = new Tva(res.getDouble("taux"), res.getString("libelle"));
+				tv.setId(res.getInt("id"));
 				return tv;
 			}
 		}catch (SQLException sqle){
