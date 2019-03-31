@@ -331,11 +331,16 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 				if(res > 0){
 					isValid = true;
 				}
+				else {
+					throw new NumberFormatException();
+				}
 			}
 			catch(NumberFormatException nfe) {
 				isValid = false;
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Erreur de saisie");
+				alert.setContentText("Quantité non valide");
+				alert.showAndWait();
 			}
 
 			if(textIn.isPresent() && isValid){
@@ -372,6 +377,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		listeCourse.getMap().clear();
 		listAchat.getItems().clear();
 		prixTotal.setText("");
+		listeCourse.reinitTarif();
 		
 		tblProduit.getItems().clear();
 		
@@ -396,6 +402,7 @@ public class ctrAccueil implements Initializable, ChangeListener<Produit> {
 		listeCourse.getMap().clear();
 		listAchat.getItems().clear();
 		prixTotal.setText("");
+		listeCourse.reinitTarif();
 		tblProduitVente.refresh();
 		
 	}

@@ -63,4 +63,8 @@ public class Achat {
 	public void setDateHeure(String dateHeure) {
 		DateHeure = dateHeure;
 	}
+	
+	public void reinitTarif() {
+		this.Tarif = 0;
+	}
 }
