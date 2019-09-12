@@ -20,6 +20,6 @@ for playing :
 - compile and execute reversi.py
 - for playing against a human enter 'h', against an IA enter 'I'
 - you can choose the difficulty of the IA :
-  b for basic
-  a for advanced 
+  b : for basic
+  a : for advanced 
 
